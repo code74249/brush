@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Brush</h1>
+      <button id="settings-btn" class="icon-btn" title="Settings">⚙️</button>
+    </header>
+    
+    <div id="settings-panel" class="hidden">
+      <h3>Configuration</h3>
+      <div class="form-group">
+        <label for="endpoint">API Endpoint:</label>
+        <input type="text" id="endpoint" placeholder="https://api.fireworks.ai/inference/v1">
+      </div>
+      <div class="form-group">
+        <label for="api-key">API Key:</label>
+        <input type="password" id="api-key" placeholder="Your Fireworks API key">
+      </div>
+      <div class="form-group">
+        <label for="model">Model:</label>
+        <input type="text" id="model" placeholder="accounts/fireworks/models/kimi-k2-5">
+      </div>
+      <div class="button-group">
+        <button id="save-settings" class="btn btn-primary">Save</button>
+        <button id="test-connection" class="btn btn-secondary">Test</button>
+      </div>
+      <div id="settings-status" class="status"></div>
+    </div>
+
+    <div id="main-panel">
+      <div class="input-group">
+        <textarea 
+          id="design-request" 
+          placeholder="Describe how you want this page to look... (e.g., 'Make it dark mode with blue accents')"
+          rows="4"
+        ></textarea>
+      </div>
+
+      <div class="button-group">
+        <button id="apply-btn" class="btn btn-primary">Apply Design</button>
+        <button id="undo-btn" class="btn btn-secondary" disabled>Undo Last Change</button>
+      </div>
+
+      <div id="status" class="status"></div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

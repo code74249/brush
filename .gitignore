@@ -1,0 +1,26 @@
+# Node.js
+node_modules/
+package-lock.json
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Test artifacts
+*.log
+coverage/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Chrome extension specific
+*.pem
+*.crx
