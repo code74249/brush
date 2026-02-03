@@ -43,14 +43,7 @@ async function applyDesign(userRequest) {
     }
     
     // 2. Capture page state from content script
-    const [{ result: captureResult }] = await chrome.scripting.executeScript({
-      target: { tabId: tab.id },
-      func: () => {
-        return new Promise((resolve) => {
-          chrome.runtime.sendMessage({ action: 'capture' }, resolve);
-        });
-      }
-    });
+    const captureResult = await chrome.tabs.sendMessage(tab.id, { action: 'capture' });
     
     if (!captureResult || !captureResult.success) {
       return { success: false, error: captureResult?.error || 'Failed to capture page' };
@@ -76,14 +69,9 @@ async function applyDesign(userRequest) {
     }
     
     // 6. Apply CSS changes via content script
-    const [{ result: applyResult }] = await chrome.scripting.executeScript({
-      target: { tabId: tab.id },
-      func: (selectors) => {
-        return new Promise((resolve) => {
-          chrome.runtime.sendMessage({ action: 'applyCSS', selectors }, resolve);
-        });
-      },
-      args: [validation.data.selectors]
+    const applyResult = await chrome.tabs.sendMessage(tab.id, {
+      action: 'applyCSS',
+      selectors: validation.data.selectors
     });
     
     if (!applyResult || !applyResult.success) {
