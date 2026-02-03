@@ -157,19 +157,12 @@ async function undoLastChange() {
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     
-    const result = await chrome.scripting.executeScript({
-      target: { tabId: tab.id },
-      func: () => {
-        return new Promise((resolve) => {
-          chrome.runtime.sendMessage({ action: 'undo' }, resolve);
-        });
-      }
-    });
+    const result = await chrome.tabs.sendMessage(tab.id, { action: 'undo' });
     
-    if (result[0].result.success) {
+    if (result.success) {
       showStatus('Last change reverted', 'success');
     } else {
-      showStatus(`Error: ${result[0].result.error}`, 'error');
+      showStatus(`Error: ${result.error}`, 'error');
     }
     
     await checkUndoStatus();
@@ -184,17 +177,10 @@ async function checkUndoStatus() {
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     
-    const result = await chrome.scripting.executeScript({
-      target: { tabId: tab.id },
-      func: () => {
-        return new Promise((resolve) => {
-          chrome.runtime.sendMessage({ action: 'checkChanges' }, resolve);
-        });
-      }
-    });
+    const result = await chrome.tabs.sendMessage(tab.id, { action: 'checkChanges' });
     
     const undoBtn = document.getElementById('undo-btn');
-    undoBtn.disabled = !result[0].result.hasChanges;
+    undoBtn.disabled = !result.hasChanges;
   } catch (error) {
     console.error('Error checking undo status:', error);
   }
@@ -224,7 +210,7 @@ function setLoading(loading) {
   const undoBtn = document.getElementById('undo-btn');
   
   applyBtn.disabled = loading;
-  undoBtn.disabled = loading || !undoBtn.disabled;
+  undoBtn.disabled = loading || undoBtn.disabled;
   
   if (loading) {
     applyBtn.textContent = 'Processing...';
